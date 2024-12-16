@@ -1,7 +1,9 @@
 ---
 - name: Ping hosts to check connectivity
   hosts: all
-  gather_facts: no
   tasks:
-    - name: Ping host to check if it's reachable
-      ansible.builtin.ping:
+  - name: Ping host to check 
+    ping: 
+  - name: hello
+    debug:
+      msg: "hello"

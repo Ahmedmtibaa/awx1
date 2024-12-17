@@ -1,14 +1,14 @@
 ---
-- name: Check for available updates on Ubuntu
+- name: Check installed packages and updates
   hosts: all
   become: yes  # Ensure commands are run as root
   tasks:
-    - name: Check for available upgrades
-      command: apt list --upgradable
-      register: upgradable_packages
-      changed_when: false  # Don't mark the task as changed
+    - name: Check history of installed packages
+      command: grep "install " /var/log/dpkg.log
+      register: installed_packages
+      changed_when: false  # We are just checking the logs, so no changes
 
-    - name: Display available upgrades
+    - name: Display installed packages
       debug:
-        msg: "The following packages can be upgraded: {{ upgradable_packages.stdout }}"
-      when: upgradable_packages.stdout != ""
+        msg: "Installed packages: {{ installed_packages.stdout_lines }}"
+      when: installed_packages.stdout != ""

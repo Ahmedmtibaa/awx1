@@ -7,3 +7,28 @@
   - name: hello
     debug:
       msg: "hello"
+---
+- name: Update patches on Ubuntu system
+  hosts: all
+  become: yes  # Use 'become' to run tasks as root
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages to the latest version
+      apt:
+        upgrade: dist  # 'dist' for full upgrade (including kernel and system packages)
+
+    - name: Install security updates
+      apt:
+        upgrade: yes
+        only_upgrade: yes
+        update_cache: yes
+        force: yes
+
+    - name: Reboot the system if required
+      reboot:
+        reboot_timeout: 600
+        test_command: whoami
+      when: ansible_facts.packages['linux-image'] is defined

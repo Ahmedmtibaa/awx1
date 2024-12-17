@@ -13,12 +13,18 @@
       register: upgradable_packages
       changed_when: false
 
-    - name: Display a neatly formatted list of upgradable packages
+    - name: Display a well-organized list of upgradable packages
       debug:
         msg: |
           {% if upgradable_packages.stdout != "" %}
-            The following packages need to be updated:
+            #### Packages Needing Updates ####
+            The following packages have updates available:
+            
             {{ upgradable_packages.stdout | regex_findall('^[^/]+') | sort | join('\n') }}
+            
+            ##################################
           {% else %}
-            No packages need updates.
+            #### No Packages Need Updates ####
+            Your system is up to date.
+            ##################################
           {% endif %}

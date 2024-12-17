@@ -1,13 +1,4 @@
 ---
-- name: Ping hosts to check connectivity
-  hosts: all
-  tasks:
-  - name: Ping host to check 
-    ping: 
-  - name: hello
-    debug:
-      msg: "hello"
----
 - name: Update patches on Ubuntu system
   hosts: all
   become: yes  # Use 'become' to run tasks as root

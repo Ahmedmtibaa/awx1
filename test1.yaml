@@ -1,8 +1,13 @@
 ---
-- name: Check OS version on all hosts
+- name: Check for available updates on Ubuntu
   hosts: all
-  gather_facts: yes  # This collects system information
-  tasks:
-    - name: Display the OS version
+  become: yes  # Ensure commands are run as root
+    - name: Check for available upgrades
+      command: apt list --upgradable
+      register: upgradable_packages
+      changed_when: false  # Don't mark the task as changed
+
+    - name: Display available upgrades
       debug:
-        msg: "The OS is {{ ansible_distribution }} version {{ ansible_distribution_version }}"
+        msg: "The following packages can be upgraded: {{ upgradable_packages.stdout }}"
+      when: upgradable_packages.stdout != ""
